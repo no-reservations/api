@@ -5,12 +5,12 @@ const Schema = mongoose.Schema;
 const restaurantModel = new Schema({
     name: { type: String, required: true },
     location: String,
-    tables: { type: Integer, required: true },
-    tables_reserved: Integer,
-    current_reservations: Integer,
+    tables: { type: Number, required: true },
+    tables_reserved: Number,
+    current_reservations: Number,
     created_at: { type: Date, default: Date.now() },
     updated_at: { type: Date, default: Date.now() },
 });
 
-const Restaurant = mongosse.model("restaurant", restaurantModel);
+const Restaurant = mongoose.model("restaurant", restaurantModel);
 module.exports = Restaurant;
