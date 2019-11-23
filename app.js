@@ -1,10 +1,17 @@
 const express = require("express");
+const bodyParser = require('body-parser');
 const logger = require("morgan");
 const routes = require("./routes");
+const db = require("./db");
 
 const app = express();
 
+
 const DEBUG = process.env.DEBUG || true;
+
+// Initialize body parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
 // Initialize logger
 const log_level = DEBUG ? "combined" : "dev";
