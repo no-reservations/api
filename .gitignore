@@ -1,0 +1,10 @@
+# Ignore everything
+*
+
+!README.md
+!.gitignore
+!yarn.lock
+!**/*.js
+
+!controllers
+!models

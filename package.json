@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.7.12"
+  },
+  "name": "api",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/no-reservations/api.git",
+  "author": "samgomena",
+  "license": "MIT"
+}
