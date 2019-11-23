@@ -1,10 +1,17 @@
 const Restaurant = require("../models/restaurant.model");
 const normalize_name = require("../utils").normalize_name;
 
-exports.view_one = async function(req, res) {
+exports.view = async function(req, res) {
     try {
+        let restaurant = null;
         const restaurant_name = normalize_name(req.params.restaurant);
-        const restaurant = await Restaurant.findOne({ normal_name: restaurant_name });
+        
+        if(restaurant_name === "all") {
+            restaurant = await Restaurant.find();
+        } else {
+            restaurant = await Restaurant.findOne({ normal_name: restaurant_name });
+        }
+        
         if(restaurant) {
             res.status(200).json({
                 message: `Successfully found ${req.body.name}.`,

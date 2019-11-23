@@ -3,8 +3,8 @@ const reservation = require("./controllers/reservation");
 
 module.exports = function routes(app) {
 
-    app.get("/restaurant/all");
-    app.get("/restaurant/:restaurant", restaurant.view_one);
+    // app.get("/restaurant/all");
+    app.get("/restaurant/:restaurant", restaurant.view);
     app.post("/restaurant", restaurant.create);
     app.put("/restaurant");
     app.delete("/restaurant");
