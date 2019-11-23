@@ -4,7 +4,7 @@ const reservation = require("./controllers/reservation");
 module.exports = function routes(app) {
 
     app.get("/restaurant")
-    app.post("/restaurant")
+    app.post("/restaurant", restaurant.create);
     app.put("/restaurant")
     app.delete("/restaurant")
 
