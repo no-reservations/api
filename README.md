@@ -10,6 +10,9 @@ Dependencies
 
 Installing
 ```bash
+# Use node 8.11.1 via nvm
+nvm use 8.11.1
+
 # Install project dependencies
 yarn install
 ```

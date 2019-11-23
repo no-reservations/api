@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const restaurantModel = new Schema({
     name: { type: String, required: true },
+    normal_name: String,
     location: String,
     tables: { type: Number, required: true },
     tables_reserved: Number,

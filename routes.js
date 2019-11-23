@@ -3,13 +3,14 @@ const reservation = require("./controllers/reservation");
 
 module.exports = function routes(app) {
 
-    app.get("/restaurant")
+    app.get("/restaurant/all");
+    app.get("/restaurant/:restaurant", restaurant.view_one);
     app.post("/restaurant", restaurant.create);
-    app.put("/restaurant")
-    app.delete("/restaurant")
+    app.put("/restaurant");
+    app.delete("/restaurant");
 
-    app.get("/reservation")
-    app.post("/reservation")
-    app.put("/reservation")
-    app.delete("/reservation")
+    app.get("/reservation");
+    app.post("/reservation");
+    app.put("/reservation");
+    app.delete("/reservation");
 }
