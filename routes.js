@@ -7,7 +7,7 @@ module.exports = function routes(app) {
     app.get("/restaurant/:restaurant", restaurant.view);
     app.post("/restaurant", restaurant.create);
     app.put("/restaurant");
-    app.delete("/restaurant");
+    app.delete("/restaurant", restaurant.delete_one);
 
     app.get("/reservation");
     app.post("/reservation");
