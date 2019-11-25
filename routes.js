@@ -1,7 +1,11 @@
+const router = require("express").Router();
+
 const restaurant = require("./controllers/restaurant");
 const reservation = require("./controllers/reservation");
 
 module.exports = function routes(app) {
+    
+    
 
     // app.get("/restaurant/all");
     app.get("/restaurant/:restaurant", restaurant.view);
