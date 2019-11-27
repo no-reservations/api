@@ -1,17 +1,19 @@
 const mongoose = require("mongoose");
+const reservationModel = require("./reservation.model");
 
 const Schema = mongoose.Schema;
 
 const restaurantModel = new Schema({
     name: { type: String, required: true, unique: true },
-    normal_name: String,
+    normal_name: { type: String, lowercase: true, trim: true},
     location: String,
     tables: { type: Number, required: true },
     tables_reserved: Number,
     current_reservations: Number,
     created_at: { type: Date, default: Date.now() },
     updated_at: { type: Date, default: Date.now() },
+    reservations: [{ type: Schema.Types.ObjectId, ref: "Reservation" }],
 });
 
-const Restaurant = mongoose.model("restaurant", restaurantModel);
+const Restaurant = mongoose.model("Restaurant", restaurantModel);
 module.exports = Restaurant;
