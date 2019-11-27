@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const reservationModel = new Schema({
-    start: { type: Date, required: true },
-    end: { type: Date, required: true },
-    restaurant: { type: Schema.Types.ObjectId, ref: "Restaurant" },
-    Guest: { type: String, required: true},
-    size: { typd: Number, required: true, min: 0 },
+    start: { type: Date, required: [true, "Start time is required!"] },
+    end: { type: Date, required: [true, "End time is required"] },
+    restaurant: { type: Schema.Types.ObjectId, ref: "Restaurant", required: [true, "Restaurant for reservation is required!"] },
+    Guest: { type: Schema.Types.ObjectId, ref: "Guest", required: [true, "Guest for reservation is required!"] },
+    size: { typd: Number, required: [true, "Party size is required!"], min: 0 },
 });
 
 const Reservation = mongoose.model("Reservation", reservationModel);
