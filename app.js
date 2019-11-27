@@ -8,6 +8,7 @@ const app = express();
 
 
 const DEBUG = process.env.DEBUG || true;
+const port = process.env.PORT || 8080;
 
 // Initialize body parser
 app.use(bodyParser.json());
@@ -22,7 +23,7 @@ routes(app);
 
 
   
-let server = app.listen(3000, function () {
+let server = app.listen(port, function () {
 
     let host = server.address().address
     let port = server.address().port

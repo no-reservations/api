@@ -1,13 +1,14 @@
+const router = require("express").Router();
+
 const restaurant = require("./controllers/restaurant");
 const reservation = require("./controllers/reservation");
 
 module.exports = function routes(app) {
-
-    // app.get("/restaurant/all");
-    app.get("/restaurant/:restaurant", restaurant.view);
-    app.post("/restaurant", restaurant.create);
-    app.put("/restaurant");
-    app.delete("/restaurant", restaurant.delete_one);
+    
+    app.get("/restaurants/:restaurant", restaurant.view);
+    app.post("/restaurants/new", restaurant.create);
+    app.put("/restaurants/update");
+    app.delete("/restaurants/remove", restaurant.delete_one);
 
     app.get("/reservation");
     app.post("/reservation");
