@@ -1,4 +1,5 @@
 const Restaurant = require("../models/restaurant.model");
+const Reservation = require("../models/reservation.model");
 const normalize_name = require("../utils").normalize_name;
 
 exports.view = async function(req, res) {
@@ -14,7 +15,7 @@ exports.view = async function(req, res) {
         
         if(restaurant) {
             message = restaurant_name === "all" && !restaurant.length ? `No restaurants have been added yet.` :
-                `Successfully found ${req.params.restaurant}.`
+                `Successfully found ${restaurant_name}.`
             res.status(200).json({
                 message: message,
                 error: null,
@@ -22,26 +23,62 @@ exports.view = async function(req, res) {
             });
         } else {
             res.status(404).json({
-                message: `Failed to find a restaurant named '${req.body.name}'.`,
+                message: `Failed to find a restaurant named '${restaurant_name}'.`,
                 error: null,
                 data: null,
             });
         }
     } catch (error) {
-        res.status(400).json({
-            message: `Failed to get ${req.body.name}.`,
+        res.status(500).json({
+            message: `Failed to get ${restaurant_name}.`,
             error: error,
             data: null,
         });
     }
 }
 
+exports.get_reservations = async function(req, res) {
+    const restaurant_name = req.params.restaurant;
+    const normal_name = normalize_name(restaurant_name);
+
+    try {
+        restaurant = await Restaurant.findOne({ normal_name: normal_name });
+
+        if(restaurant) {
+            reservations = restaurant.reservations;
+            if(!reservations.length) 
+                message = `No reservations have been made yet.`;
+            res.status(200).json({
+                message: message,
+                error: null,
+                data: reservations,
+            });
+        } else {
+            res.status(404).json({
+                message: `No restaurant named '${restaurant_name}'.`,
+                error: null,
+                data: null,
+            });
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            message: `Failed to get reservations for '${restaurant_name}'.`,
+            error: error,
+            data: null,
+        });
+    }
+
+}
+
 exports.create = async function(req, res) {
 
     try {
-        const normal_name = normalize_name(req.body.name);
+        const real_name = req.body.name;
+        const normal_name = normalize_name(real_name);
+
         const new_restaurant = await Restaurant.create({
-            name: req.body.name,
+            name: real_name,
             normal_name: normal_name,
             tables: req.body.tables,
             tables_reserved: 0,
@@ -50,13 +87,13 @@ exports.create = async function(req, res) {
         
         // 201 - Created
         res.status(201).json({
-            message: `Successfully created '${req.body.name}'.`,
+            message: `Successfully created '${real_name}'.`,
             error: null,
             data: new_restaurant,
         });
     } catch (error) {
-        res.status(400).json({
-            message: `Failed to create '${req.body.name}'.`,
+        res.status(500).json({
+            message: `Failed to create '${real_name}'.`,
             error: error,
             data: null,
         });
@@ -64,28 +101,29 @@ exports.create = async function(req, res) {
 }
 
 exports.delete_one = async function(req, res) {
-    // Get name from url param
-    const normal_name = normalize_name(req.params.restaurant);
+// Get name from url param
+    const restaurant_name = req.params.restaurant;
+    const normal_name = normalize_name(restaurant_name);
 
     try {
         const deleted_restaurant = await Restaurant.findOneAndDelete({ normal_name: normal_name });
         console.log(deleted_restaurant)
         if(deleted_restaurant) {
             res.status(200).json({
-                message: `Successfully deleted '${req.params.restaurant}'.`,
+                message: `Successfully deleted '${restaurant_name}'.`,
                 error: null,
                 data: deleted_restaurant,
             });
         } else {
             res.status(404).json({
-                message: `Couldn't find a restaurant named '${req.params.restaurant}'.`,
+                message: `Couldn't find a restaurant named '${restaurant_name}'.`,
                 error: null,
                 data: null,
             });
         }
     } catch (error) {
-        res.status(400).json({
-            message: `There was an error trying to delete '${req.params.restaurant}'.`,
+        res.status(500).json({
+            message: `There was an error trying to delete '${restaurant_name}'.`,
             error: error,
             data: null,
         });
