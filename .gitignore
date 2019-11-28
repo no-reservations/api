@@ -1,10 +1,16 @@
 # Ignore everything
 *
 
+# Except for general files...
 !README.md
 !.gitignore
 !yarn.lock
+!Dockerfile
+!.dockerignore
+
+# JS files...
 !**/*.js
 
+# And folders with js files
 !controllers
 !models
