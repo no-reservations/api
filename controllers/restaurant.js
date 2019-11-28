@@ -1,16 +1,17 @@
 const Restaurant = require("../models/restaurant.model");
 const Reservation = require("../models/reservation.model");
-const normalize_name = require("../utils").normalize_name;
+const sanitize = require("../utils").sanitize;
 
 exports.view = async function(req, res) {
     try {
         let restaurant = null;
-        const restaurant_name = normalize_name(req.params.restaurant);
+        const restaurant_name = req.params.restaurant;
+        const sanitized_name = sanitize(restaurant_name);
 
         if(restaurant_name === "all") {
             restaurant = await Restaurant.find();
         } else {
-            restaurant = await Restaurant.findOne({ normal_name: restaurant_name });
+            restaurant = await Restaurant.findOne({ normal_name: sanitized_name });
         }
         
         if(restaurant) {
@@ -39,10 +40,10 @@ exports.view = async function(req, res) {
 
 exports.get_reservations = async function(req, res) {
     const restaurant_name = req.params.restaurant;
-    const normal_name = normalize_name(restaurant_name);
+    const normal_name = sanitize(restaurant_name);
 
     try {
-        restaurant = await Restaurant.findOne({ normal_name: normal_name });
+        restaurant = await Restaurant.findOne({ normal_name: sanitized_name });
 
         if(restaurant) {
             reservations = restaurant.reservations;
@@ -75,11 +76,11 @@ exports.create = async function(req, res) {
 
     try {
         const real_name = req.body.name;
-        const normal_name = normalize_name(real_name);
+        const sanitized_name = sanitize(real_name);
 
         const new_restaurant = await Restaurant.create({
             name: real_name,
-            normal_name: normal_name,
+            normal_name: sanitized_name,
             tables: req.body.tables,
             tables_reserved: 0,
             current_reservations: 0,
@@ -103,10 +104,10 @@ exports.create = async function(req, res) {
 exports.delete_one = async function(req, res) {
 // Get name from url param
     const restaurant_name = req.params.restaurant;
-    const normal_name = normalize_name(restaurant_name);
+    const sanitized_name = sanitize(restaurant_name);
 
     try {
-        const deleted_restaurant = await Restaurant.findOneAndDelete({ normal_name: normal_name });
+        const deleted_restaurant = await Restaurant.findOneAndDelete({ normal_name: sanitized_name });
         console.log(deleted_restaurant)
         if(deleted_restaurant) {
             res.status(200).json({

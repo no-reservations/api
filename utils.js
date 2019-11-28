@@ -1,7 +1,10 @@
-function normalize_name(name) {
-    return name.replace(/[ -,]/g, "_");
+"use strict";
+
+function sanitize_name(name) {
+    const short_name = name.replace(/['"]/g, "");
+    return short_name.replace(/[ _,]/g, "-");
 }
 
 module.exports = {
-    normalize_name: normalize_name,
+    normalize_name: sanitize_name,
 }
