@@ -6,5 +6,5 @@ function sanitize_name(name) {
 }
 
 module.exports = {
-    normalize_name: sanitize_name,
+    sanitize: sanitize_name,
 }
