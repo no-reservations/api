@@ -3,10 +3,11 @@ const Reservation = require("../models/reservation.model");
 const sanitize = require("../utils").sanitize;
 
 exports.view = async function(req, res) {
+    const restaurant_name = req.params.restaurant;
+    const sanitized_name = sanitize(restaurant_name);
+
     try {
         let restaurant = null;
-        const restaurant_name = req.params.restaurant;
-        const sanitized_name = sanitize(restaurant_name);
 
         if(restaurant_name === "all") {
             restaurant = await Restaurant.find();
@@ -40,7 +41,7 @@ exports.view = async function(req, res) {
 
 exports.get_reservations = async function(req, res) {
     const restaurant_name = req.params.restaurant;
-    const normal_name = sanitize(restaurant_name);
+    const sanitized_name = sanitize(restaurant_name);
 
     try {
         restaurant = await Restaurant.findOne({ normal_name: sanitized_name });
@@ -73,10 +74,10 @@ exports.get_reservations = async function(req, res) {
 }
 
 exports.create = async function(req, res) {
+    const real_name = req.body.name;
+    const sanitized_name = sanitize(real_name);
 
     try {
-        const real_name = req.body.name;
-        const sanitized_name = sanitize(real_name);
 
         const new_restaurant = await Restaurant.create({
             name: real_name,
@@ -102,13 +103,13 @@ exports.create = async function(req, res) {
 }
 
 exports.delete_one = async function(req, res) {
-// Get name from url param
+    // Get name from url param
     const restaurant_name = req.params.restaurant;
     const sanitized_name = sanitize(restaurant_name);
 
     try {
         const deleted_restaurant = await Restaurant.findOneAndDelete({ normal_name: sanitized_name });
-        console.log(deleted_restaurant)
+
         if(deleted_restaurant) {
             res.status(200).json({
                 message: `Successfully deleted '${restaurant_name}'.`,
