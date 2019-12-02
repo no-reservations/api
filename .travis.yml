@@ -9,9 +9,12 @@ services:
   # - mongodb
   - docker
 
-before_install:
-  - VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+env:
+  - VERSION="0.0.1"
 
+before_install:
+  # - VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+  
   - docker build -t api:$VERSION .
   - docker save --output api.tar api:$VERSION
   - scp -i $TRAVIS_DEPLOY_KEY api.tar root@165.227.23.80:/tmp
