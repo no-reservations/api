@@ -102,6 +102,35 @@ exports.create = async function(req, res) {
     }
 }
 
+exports.create_reservation = async function(req, res) {
+    const real_name = req.params.restaurant;
+    const sanitized_name = sanitize(real_name);
+
+    try {
+        restaurant = await Restaurant.find({ normal_name: sanitized_name });
+
+        const new_reservation = await Reservation.create({
+            start: req.body.start,
+            end: req.body.end,
+            restaurant: restaurant,
+            size: req.body.size,
+        });
+
+        res.status(201).json({
+            message: `Successfully created reservation.`,
+            error: null,
+            data: new_reservation,
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: `Failed to create reservation.`,
+            error: error,
+            data: null,
+        })
+    }
+
+}
+
 exports.delete_one = async function(req, res) {
     // Get name from url param
     const restaurant_name = req.params.restaurant;
