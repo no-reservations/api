@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require('body-parser');
 const logger = require("morgan");
+const cors = require("cors");
 const routes = require("./routes");
 const db = require("./db");
 
@@ -17,6 +18,13 @@ app.use(bodyParser.urlencoded({extended: false}));
 // Initialize logger
 const log_level = DEBUG ? "combined" : "dev";
 app.use(logger(log_level));
+
+// TODO: Specify stricter cors mode in dev environment
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 // Initialize routes
 routes(app);
