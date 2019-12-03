@@ -7,7 +7,6 @@ const db = require("./db");
 
 const app = express();
 
-
 const DEBUG = process.env.DEBUG || true;
 const port = process.env.PORT || 8080;
 
@@ -29,13 +28,10 @@ app.use(function(req, res, next) {
 // Initialize routes
 routes(app);
 
+let server = app.listen(port, () => {
 
-  
-let server = app.listen(port, function () {
+    let host = server.address().address;
+    let port = server.address().port;
 
-    let host = server.address().address
-    let port = server.address().port
-
-    console.log('app listening at http://%s:%s', host, port)
-
+    DEBUG && console.log('app listening at http://%s:%s', host, port);
 });
