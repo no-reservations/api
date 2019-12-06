@@ -1,3 +1,5 @@
+"use strict";
+
 const Restaurant = require("../models/restaurant.model");
 const sanitize = require("../utils").sanitize;
 
