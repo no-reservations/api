@@ -84,6 +84,7 @@ exports.create_reservation = async function(req, res) {
         });
 
         restaurant.reservations.push(new_reservation);
+        restaurant.tables_reserved += 1;
         await restaurant.save();
 
         res.status(201).json({
