@@ -15,6 +15,8 @@ const DEBUG = require("./config").DEBUG;
 // Initialize body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.text());
+app.use(bodyParser.json({ type: 'application/json'}));  
 
 // Initialize logger
 const log_level = DEBUG ? "combined" : "dev";
@@ -31,14 +33,19 @@ DEBUG &&
 // Initialize routes
 routes(app);
 
-let server = app.listen(PORT, () => {
+const app_server = app.listen(PORT, () => {
     const {
         family,
         address, 
         port 
-    } = server.address();
+    } = app_server.address();
 
     DEBUG && console.log(
         `app listening via ${family} at http://${address}:${port}`,
     );
 });
+
+// app.listen(PORT);
+
+// Export app for testing
+module.exports = app;
