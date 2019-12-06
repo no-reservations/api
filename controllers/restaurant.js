@@ -6,25 +6,17 @@ exports.get_restaurant = async function(req, res) {
     const sanitized_name = sanitize(restaurant_name);
 
     try {
-        let restaurant = null;
-
-        if(restaurant_name === "all") {
-            restaurant = await Restaurant.find();
-        } else {
-            restaurant = await Restaurant.findOne({ normal_name: sanitized_name });
-        }
+        const restaurant = await Restaurant.findOne({ normal_name: sanitized_name });
         
         if(restaurant) {
-            message = restaurant_name === "all" && !restaurant.length ? `No restaurants have been added yet.` :
-                `Successfully found ${restaurant_name}.`
             res.status(200).json({
-                message: message,
+                message: `Successfully found ${restaurant_name}.`,
                 error: null,
                 data: restaurant,
             });
         } else {
             res.status(404).json({
-                message: `Failed to find a restaurant named '${restaurant_name}'.`,
+                message: `No restaurants have been added yet.`,
                 error: null,
                 data: null,
             });
@@ -32,6 +24,34 @@ exports.get_restaurant = async function(req, res) {
     } catch (error) {
         res.status(500).json({
             message: `Failed to get ${restaurant_name}.`,
+            error: error,
+            data: null,
+        });
+    }
+}
+
+exports.get_restaurants = async function(req, res) {
+
+    try {
+
+        const restaurant = await Restaurant.find();
+        
+        if(restaurant) {
+            res.status(200).json({
+                message: `Successfully found all restaurants.`,
+                error: null,
+                data: restaurant,
+            });
+        } else {
+            res.status(404).json({
+                message: `No restaurants have been added yet.`,
+                error: null,
+                data: null,
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: `Failed to get restaurants.`,
             error: error,
             data: null,
         });
