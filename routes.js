@@ -14,7 +14,7 @@ module.exports = function routes(app) {
     app.post("/restaurants/:restaurant/reservations/new", reservation.create_reservation);
     
     app.put("/restaurants/:restaurant_id/update", restaurant.update_restaurant);
-    app.put("restaurants/:restaurant/reservations/:reservation/update")
+    app.put("/restaurants/:restaurant_id/reservations/:reservation_id/update", reservation.update_reservation)
     
     app.delete("/restaurants/:restaurant/remove", restaurant.delete_restaurant);
 

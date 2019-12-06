@@ -80,7 +80,7 @@ exports.create_reservation = async function(req, res) {
             start: req.body.start,
             end: req.body.end,
             restaurant: restaurant._id,
-            size: req.body.size,
+            party_size: req.body.party_size,
         });
 
         restaurant.reservations.push(new_reservation);
@@ -94,6 +94,48 @@ exports.create_reservation = async function(req, res) {
     } catch (error) {
         res.status(500).json({
             message: `Failed to create reservation.`,
+            error: error.toString(),
+            data: null,
+        });
+    }
+}
+
+exports.update_reservation = async function(req, res) {
+    const restaurant_id = req.params.restaurant_id;
+    const reservation_id = req.params.reservation_id;
+
+    try {
+        const restaurant = await Restaurant.findById(restaurant_id);
+
+        const updated_reservation = await Reservation.findByIdAndUpdate(reservation_id, 
+            {
+                ...req.body,
+                updated_on: Date.now(),
+            },
+            {
+                // Return the new document
+                new: true,
+                // Run the schema validators upon update; i.e. ensures values within min/max, required field isn't deleted
+                runValidators: true,
+            }
+        )
+
+        if(updated_reservation) {
+            res.status(200).json({
+                message: `Successfully updated reservation for ${restaurant.name}.`,
+                error: null,
+                data: updated_reservation,
+            });
+        } else {
+            res.status(404).json({
+                message: `No reservation found with id '${reservation_id}'.`,
+                error: null,
+                data: null,
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: `Failed to update reservation with id '${reservation_id}'.`,
             error: error.toString(),
             data: null,
         });
