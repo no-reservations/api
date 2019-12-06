@@ -7,6 +7,7 @@ const db = require("./db");
 
 const app = express();
 
+// TODO: Put this in a config file
 const DEBUG = process.env.DEBUG || true;
 const port = process.env.PORT || 8080;
 
