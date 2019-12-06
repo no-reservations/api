@@ -1,9 +1,12 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const capitalize = require("../utils").capitalize;
+
 const userModel = new Schema({
     firstname: { 
         type: String,
+        set: capitalize,  // Run custom setter to capitalize firstname
         required: [
             true,
             "firstname must be given!"
@@ -11,6 +14,7 @@ const userModel = new Schema({
     },
     lastname: { 
         type: String,
+        set: capitalize,  // Run custom setter to capitalize lastname
         required: [
             true,
             "Lastname must be given!"
