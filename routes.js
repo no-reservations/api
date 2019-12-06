@@ -7,7 +7,7 @@ module.exports = function routes(app) {
     
     app.get("/restaurants/:restaurant", restaurant.get_restaurant);
     app.get("/restaurants/:restaurant/reservations", reservation.get_reservations);
-    app.get("/restaurants/:restaurant/reservations/:reservation");
+    app.get("/restaurants/:restaurant/reservations/:reservation", reservation.get_reservation);
     
     app.post("/restaurants/new", restaurant.create_restaurant);
     app.post("/restaurants/:restaurant/reservations/new", reservation.create_reservation);
