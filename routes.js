@@ -13,7 +13,7 @@ module.exports = function routes(app) {
     app.post("/restaurants/new", restaurant.create_restaurant);
     app.post("/restaurants/:restaurant/reservations/new", reservation.create_reservation);
     
-    app.put("/restaurants/:restaurant/update");
+    app.put("/restaurants/:restaurant_id/update", restaurant.update_restaurant);
     app.put("restaurants/:restaurant/reservations/:reservation/update")
     
     app.delete("/restaurants/:restaurant/remove", restaurant.delete_restaurant);

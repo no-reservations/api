@@ -88,6 +88,45 @@ exports.create_restaurant = async function(req, res) {
     }
 }
 
+exports.update_restaurant = async function(req, res) {
+    const restaurant_id = req.params.restaurant_id;
+
+    try {
+        const updated_restaurant = await Restaurant.findOneAndUpdate(restaurant_id, 
+            { 
+                ...req.body,
+                updated_at: Date.now(), 
+            },
+            {
+                // Return the new document
+                new: true,
+                // Run the schema validators upon update; i.e. ensures values within min/max, required field isn't deleted
+                runValidators: true,
+            }
+        )
+
+        if(updated_restaurant) {
+            res.status(200).json({
+                message: `Successfully updated ${updated_restaurant.name}.`,
+                error: null,
+                data: updated_restaurant,
+            });
+        } else {
+            res.status(404).json({
+                message: `No restaurant found with id '${restaurant_id}'.`,
+                error: null,
+                data: null,
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: `Failed to update restaurant with id '${restaurant_id}'.`,
+            error: error.toString(),
+            data: null,
+        });
+    }
+}
+
 exports.delete_restaurant = async function(req, res) {
     const restaurant_name = req.params.restaurant;
     const sanitized_name = sanitize(restaurant_name);
