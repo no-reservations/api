@@ -6,8 +6,11 @@ const restaurant = require("./controllers/restaurant.controller");
 const reservation = require("./controllers/reservation.controller");
 const user = require("./controllers/user.controller");
 
+const token_middleware = require("./middleware/jwt");
+
 module.exports = function routes(app) {
     
+    // TODO: Use token middleware to ensure we're the correct user
     app.get("/users/:user_id", user.get_user);
     app.get("/restaurants/all", restaurant.get_restaurants);
     app.get("/restaurants/:restaurant", restaurant.get_restaurant);

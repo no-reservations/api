@@ -7,6 +7,10 @@ const SALT_ROUNDS = 10;
 
 exports.get_user = async function(req, res) {
     const user_id = req.params.user_id;
+    const token = req.token;
+    console.log(
+        token
+    )
 
     try {
         const user = await User.findById(user_id);

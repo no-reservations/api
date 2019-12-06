@@ -9,9 +9,8 @@ const db = require("./db");
 
 const app = express();
 
-// TODO: Put this in a config file
-const DEBUG = process.env.DEBUG || true;
-const port = process.env.PORT || 8080;
+const PORT = require("./config").PORT;
+const DEBUG = require("./config").DEBUG;
 
 // Initialize body parser
 app.use(bodyParser.json());
@@ -23,19 +22,23 @@ app.use(logger(log_level));
 
 // TODO: Specify stricter cors mode in dev environment
 DEBUG && 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+    app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
 
 // Initialize routes
 routes(app);
 
-let server = app.listen(port, () => {
+let server = app.listen(PORT, () => {
+    const {
+        family,
+        address, 
+        port 
+    } = server.address();
 
-    let host = server.address().address;
-    let port = server.address().port;
-
-    DEBUG && console.log('app listening at http://%s:%s', host, port);
+    DEBUG && console.log(
+        `app listening via ${family} at http://${address}:${port}`,
+    );
 });
