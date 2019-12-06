@@ -11,7 +11,7 @@
 
 # JS files...
 !**/*.js
-!test/**/*.js
+!test/
 
 # And folders with js files
 !controllers
