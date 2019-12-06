@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const guestModel = new Schema({
+const userModel = new Schema({
     firstname: { 
         type: String,
         required: [
@@ -11,6 +11,10 @@ const guestModel = new Schema({
     },
     lastname: { 
         type: String,
+        required: [
+            true,
+            "Lastname must be given!"
+        ]
     },
     // Add validator for phone number.
     // Note: This fails for int'l stuff
@@ -19,7 +23,9 @@ const guestModel = new Schema({
         type: String,
         validate: {
             validator: v => {
-                Promise.resolve(/\d{3}-\d{3}-\d{4}/.test(v));
+                Promise.resolve(
+                    /\d{3}-\d{3}-\d{4}/.test(v)
+                );
             },
             message: props => `${props.value} is not a valid phone number!`
         },
@@ -28,10 +34,32 @@ const guestModel = new Schema({
             "User phone number required"
         ]
     },
+    email: {
+        type: String,
+        validate: {
+            validator: v => {
+                Promise.resolve(
+                    /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v)
+                );
+            },
+            message: props => `${props.value} is not a valid email!`
+        },
+        required: [
+            true,
+            "An email is required!"
+        ]
+    },
+    password: {
+        type: String,
+        Required: [
+            true,
+            "A password is required to sign up!"
+        ]
+    },
     reservations: [
         { 
-            type: Schema.Types.ObjectId, 
-            ref: "Reservation" 
+            type: Schema.Types.ObjectId,
+            ref: "Reservations"
         }
     ],
     created_at: { 
@@ -44,5 +72,5 @@ const guestModel = new Schema({
     },
 });
 
-const Guest = mongoose.model("Guest", guestModel);
-module.exports = Guest;
+const User = mongoose.model("User", userModel);
+module.exports = User;
