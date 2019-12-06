@@ -16,11 +16,11 @@ module.exports = function routes(app) {
     app.post("/restaurants/new", restaurant.create_restaurant);
     app.post("/restaurants/:restaurant/reservations/new", reservation.create_reservation);
     
-    app.put("/users/user_id/update", user.update_user);
+    app.put("/users/:user_id/update", user.update_user);
     app.put("/restaurants/:restaurant_id/update", restaurant.update_restaurant);
     app.put("/restaurants/:restaurant_id/reservations/:reservation_id/update", reservation.update_reservation)
     
-    app.delete("/users/user_id/remove", user.delete_user);
+    app.delete("/users/:user_id/remove", user.delete_user);
     app.delete("/restaurants/:restaurant/remove", restaurant.delete_restaurant);
 
 }
