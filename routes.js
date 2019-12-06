@@ -6,7 +6,7 @@ const user = require("./controllers/user.controller");
 
 module.exports = function routes(app) {
     
-    app.get("/users/:user_id");
+    app.get("/users/:user_id", user.get_user);
     app.get("/restaurants/all", restaurant.get_restaurants);
     app.get("/restaurants/:restaurant", restaurant.get_restaurant);
     app.get("/restaurants/:restaurant/reservations", reservation.get_reservations);
@@ -16,11 +16,11 @@ module.exports = function routes(app) {
     app.post("/restaurants/new", restaurant.create_restaurant);
     app.post("/restaurants/:restaurant/reservations/new", reservation.create_reservation);
     
-    app.put("/users/user_id/update");
+    app.put("/users/user_id/update", user.update_user);
     app.put("/restaurants/:restaurant_id/update", restaurant.update_restaurant);
     app.put("/restaurants/:restaurant_id/reservations/:reservation_id/update", reservation.update_reservation)
     
-    app.put("/users/user_id/remove");
+    app.put("/users/user_id/remove", user.delete_user);
     app.delete("/restaurants/:restaurant/remove", restaurant.delete_restaurant);
 
 }
