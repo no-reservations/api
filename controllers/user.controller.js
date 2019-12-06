@@ -32,12 +32,12 @@ exports.get_user = async function(req, res) {
 }
 
 exports.create_user = async function(req, res) {
+    
     try {
-
-        const password_hash = await bcrypt.hash(req.body.password, SALT_ROUNDS);
-        console.log(
-            password_hash,
-        )
+        const password_hash = await bcrypt.hash(
+            req.body.password, 
+            SALT_ROUNDS
+        );
 
         const new_user = await User.create({
             firstname: req.body.firstname,

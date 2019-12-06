@@ -20,7 +20,7 @@ module.exports = function routes(app) {
     app.put("/restaurants/:restaurant_id/update", restaurant.update_restaurant);
     app.put("/restaurants/:restaurant_id/reservations/:reservation_id/update", reservation.update_reservation)
     
-    app.put("/users/user_id/remove", user.delete_user);
+    app.delete("/users/user_id/remove", user.delete_user);
     app.delete("/restaurants/:restaurant/remove", restaurant.delete_restaurant);
 
 }
