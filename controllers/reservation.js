@@ -33,7 +33,7 @@ exports.get_reservations = async function(req, res) {
     } catch (error) {
         res.status(500).json({
             message: `Failed to get reservations for '${restaurant_name}'.`,
-            error: error,
+            error: error.toString(),
             data: null,
         });
     }
@@ -63,7 +63,7 @@ exports.get_reservation = async function(req, res) {
     } catch (error) {
         res.status(500).json({
             message: `Failed to find reservation with id '${reservation_id}'.`,
-            error: error,
+            error: error.toString(),
             data: null,
         });
     }
@@ -94,7 +94,7 @@ exports.create_reservation = async function(req, res) {
     } catch (error) {
         res.status(500).json({
             message: `Failed to create reservation.`,
-            error: error,
+            error: error.toString(),
             data: null,
         });
     }

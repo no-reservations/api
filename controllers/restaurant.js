@@ -24,7 +24,7 @@ exports.get_restaurant = async function(req, res) {
     } catch (error) {
         res.status(500).json({
             message: `Failed to get ${restaurant_name}.`,
-            error: error,
+            error: error.toString(),
             data: null,
         });
     }
@@ -52,7 +52,7 @@ exports.get_restaurants = async function(req, res) {
     } catch (error) {
         res.status(500).json({
             message: `Failed to get restaurants.`,
-            error: error,
+            error: error.toString(),
             data: null,
         });
     }
@@ -82,7 +82,7 @@ exports.create_restaurant = async function(req, res) {
     } catch (error) {
         res.status(500).json({
             message: `Failed to create '${real_name}'.`,
-            error: error,
+            error: error.toString(),
             data: null,
         });
     }
@@ -150,7 +150,7 @@ exports.delete_restaurant = async function(req, res) {
     } catch (error) {
         res.status(500).json({
             message: `There was an error trying to delete '${restaurant_name}'.`,
-            error: error,
+            error: error.toString(),
             data: null,
         });
     }
