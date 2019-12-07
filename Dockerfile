@@ -1,5 +1,6 @@
 FROM node:10.16.3-alpine as build
 WORKDIR /root
+RUN apk add python make gcc g++
 COPY . .
 RUN yarn install
 
