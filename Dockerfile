@@ -5,4 +5,5 @@ RUN yarn install
 
 FROM gcr.io/distroless/nodejs
 COPY --from=build /root/ /
+ENV PRODUCTION true
 CMD ["app.js"]
