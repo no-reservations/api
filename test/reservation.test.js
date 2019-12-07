@@ -11,7 +11,7 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 
-describe("restaurant", () => {
+describe("reservation", () => {
     beforeEach(done => {
         Restaurant.remove({}, (err) => { 
            done();
@@ -24,7 +24,7 @@ describe("restaurant", () => {
     });
 
     describe("GET restaurant", () => {
-        it("it should GET all the restaurants", (done) => {
+        it("it should GET all the reservations for a restaurant", (done) => {
             chai.request(server)
                 .get("/restaurants/all")
                 .end((err, res) => {
@@ -38,17 +38,41 @@ describe("restaurant", () => {
         });
     });
 
-    describe("POST restaurant", () => {
-        it("it should POST a restaurant", (done) => {
+    describe("POST reservation", () => {
+        let restaurant_id = null;
+        let reservation_id = null;
+        it("it should POST a reservation to a restaurant", (done) => {
             const restaurant = {
                 name: "test_restaurant",
                 normal_name: "test-restaurant",
                 tables: 10,
                 location: "Portland, Oregon",
             }
+
+            const reservation = {
+                name: "test_reservation",
+                start: Date.Now(),
+                end: Date.now(),
+                size: 4,
+            }
+            // Create restaurant
             chai.request(server)
-                .post("/restaurants/new")
+                .post("/restaurants/all")
                 .send(restaurant)
+                .end((err, res) => {
+                        res.should.have.status(201);
+                        res.body.should.be.a("object");
+                        res.body.should.have.property("message");
+                        res.body.should.have.property("error");
+                        res.body.should.have.property("data");
+                        restaurant_id = res.body.data[0]._id;
+                    done();
+            });
+
+            // Create reservation
+            chai.request(server)
+                .post(`/restaurants/${restaurant_id}/reservations/new`)
+                .send(reservation)
                 .end((err, res) => {
                         res.should.have.status(201);
                         res.body.should.be.a("object");
@@ -60,9 +84,9 @@ describe("restaurant", () => {
         });
     });
 
-    // TODO: Create restaurant before PUTing to that restaurant
-    describe("PUT restaurant", () => {
+    describe("PUT reservation", () => {
         let restaurant_id = null;
+        let reservation_id = null;
         it("it should POST a new restaurant for PUT", done => {
             const restaurant = {
                 name: "test_restaurant",
@@ -70,32 +94,54 @@ describe("restaurant", () => {
                 tables: 10,
                 location: "Portland, Oregon",
             }
-            // Create new restaurant
+
+            const reservation = {
+                name: "test_reservation",
+                start: Date.Now(),
+                end: Date.now(),
+                size: 4,
+            }
+
+            // Create restaurant
             chai.request(server)
                 .post("/restaurants/new")
                 .send(restaurant)
+                .end((err, res) => {
+                        res.should.have.status(201);
+                        res.body.should.be.a("object");
+                        res.body.should.have.property("message");
+                        res.body.should.have.property("error");
+                        res.body.should.have.property("data");
+                        restaurant_id = res.body.data[0]._id;
+                    done();
+            });
+
+            // Create initial reservation
+            chai.request(server)
+                .post(`/restaurants/${restaurant_id}/reservations/new`)
+                .send(reservation)
                 .end((err, res) => {
                     res.should.have.status(201);
                     res.body.should.be.a("object");
                     res.body.should.have.property("message");
                     res.body.should.have.property("error");
                     res.body.should.have.property("data");
-                    restaurant_id = res.body._id;
+                    restaurant_id = res.body.restaurant._id;
+                    reservation_id = res.body._id;
                     done();
             });
         });
         it("it should PUT to an already created restaurant", done => {
-            const updated_restuarant = {
-                // Should not be "test_restaurant"
-                name: "restaurant_test"
+            const updated_reservation = {
+                size: 6,
             }
             console.log(
-                `/restaurants/${restaurant_id}/update`
+                `/restaurants/${restaurant_id}/reservations/${reservation_id}`
             );
             
             chai.request(server)
-                .put(`/restaurants/${restaurant_id}/update`)
-                .send(updated_restuarant)
+                .put(`/restaurants/${restaurant_id}/reservations/${reservation_id}/update`)
+                .send(updated_reservation)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a("object");
@@ -106,16 +152,17 @@ describe("restaurant", () => {
                         res.body._id
                     )
                     res.body.data.name.should.be(
-                        updated_restuarant.name
+                        updated_reservation.size,
+                        6
                     )
                     done();
             });
         });
     });
 
-    // TODO: Create restaurant before DELETEing to that restaurant
-    describe("DELETE restaurant", () => {
+    describe("DELETE reservation", () => {
         let restaurant_id = null;
+        let reservtion_id = null;
         it("it should POST a new restaurant for DELETE", done => {
             const restaurant = {
                 name: "test_restaurant",
@@ -123,7 +170,14 @@ describe("restaurant", () => {
                 tables: 10,
                 location: "Portland, Oregon",
             }
-            // Create new restaurant
+
+            const reservation = {
+                name: "test_reservation",
+                start: Date.Now(),
+                end: Date.now(),
+                size: 4,
+            }
+            // Create restaurant
             chai.request(server)
                 .post("/restaurants/new")
                 .send(restaurant)
@@ -133,23 +187,31 @@ describe("restaurant", () => {
                     res.body.should.have.property("message");
                     res.body.should.have.property("error");
                     res.body.should.have.property("data");
-                    console.dir(
-                        res.body._id
-                    )
-                    restaurant_id = res.body._id;
+
+                    restaurant_id = res.body.restaurants._id;
+                    done();
+            });
+
+            // Create reservation
+            chai.request(server)
+                .post(`/restaurants/${restaurant_id}/reservations/new`)
+                .send(reservation)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a("object");
+                    res.body.should.have.property("message");
+                    res.body.should.have.property("error");
+                    res.body.should.have.property("data");
+                    restaurant_id = res.body.restaurant._id;
+                    reservation_id = res.body._id;
                     done();
             });
         });
-        it("it should DELETE a restaurant", (done) => {
-            const restaurant = {
-                name: "test_restaurant",
-                normal_name: "test-restaurant",
-                tables: 10,
-                location: "Portland, Oregon",
-            }
+        it("it should DELETE a reservation", (done) => {
+
             chai.request(server)
-                .delete(`/restaurants/${restaurant_id}/remove`)
-                .send(restaurant)
+                .delete(`/restaurants/${restaurant_id}/reservations/${reservation_id}/remove`)
+                // .send(restaurant)
                 .end((err, res) => {
                     res.should.have.status(201);
                     res.body.should.be.a("object");
