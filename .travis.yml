@@ -25,6 +25,6 @@ env:
 
 before_script:
     - yarn install
-    - docker run -it -p 27017:27017 mongo:bionic mongod
+    - docker run -d -p 27017:27017 mongo:bionic mongod
 
 script: yarn test
