@@ -1,9 +1,7 @@
 process.env.NODE_ENV = "test";
 
-let mongoose = require("mongoose");
 let Restaurant = require("../models/restaurant.model");
 
-//Require the dev-dependencies
 let chai = require("chai");
 let chaiHttp = require("chai-http");
 let server = require("../app");
@@ -75,7 +73,6 @@ describe("restaurant", () => {
         });
     });
 
-    // TODO: Create restaurant before PUTing to that restaurant
     describe("PUT restaurant", () => {
         it("it should successfully PUT to a restaurant", done => {
             const updated_restuarant = {
