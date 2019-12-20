@@ -1,5 +1,7 @@
 ## API
 
+[![Build Status](https://travis-ci.org/no-reservations/api.svg?branch=develop)](https://travis-ci.org/no-reservations/api)
+
 ## Getting Started
 
 Dependencies
