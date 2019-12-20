@@ -3,7 +3,7 @@
 const mongoose = require("mongoose");
 
 const database_name = process.env.DB_NAME;
-const database_uri = process.env.DB_URL || `mongodb://localhost`;
+const database_uri = process.env.DB_URI || `mongodb://localhost`;
 const database_url = `${database_uri}/${database_name}`;
 
 mongoose.connect(database_url, { 
