@@ -12,14 +12,14 @@ services:
 env:
   - VERSION="0.0.1"
 
-# before_install:
+before_install:
   # - VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
   
-  # - docker build -t api:$VERSION .
-  # - docker save --output api.tar api:$VERSION
-  # - scp -i $TRAVIS_DEPLOY_KEY api.tar root@165.227.23.80:/tmp
-  # - ssh -i $TRAVIS_DEPLOY_KEY "docker load --input /tmp/api.tar"
-  # - ssh -i $TRAVIS_DEPLOY_KEY "docker run -p="8080:8080" --expose="27017" --net="host" api:$VERSION"
+  - docker build -t api:latest .
+  - docker save --output api.tar api:$VERSION
+  - scp -i $TRAVIS_DEPLOY_KEY api.tar root@165.227.23.80:/tmp
+  - ssh -i $TRAVIS_DEPLOY_KEY "docker load --input /tmp/api.tar"
+  - ssh -i $TRAVIS_DEPLOY_KEY "docker run -p="8080:8080" --expose="27017" --net="host" api:$VERSION"
 
 before_cript:
     - yarn install
