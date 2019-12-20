@@ -6,7 +6,7 @@ const restaurant = require("./controllers/restaurant.controller");
 const reservation = require("./controllers/reservation.controller");
 const user = require("./controllers/user.controller");
 
-const token_middleware = require("./middleware/jwt");
+const token_middleware = require("./middlewares/jwt");
 
 module.exports = function routes(app) {
     
