@@ -11,11 +11,21 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 
+const test_restaurant = {
+    name: "test_restaurant",
+    tables: 10,
+    location: "Portland, Oregon",
+}
+
 describe("restaurant", () => {
     beforeEach(done => {
-        Restaurant.remove({}, (err) => { 
-           done();
-        });        
+        Restaurant.remove({}, (err) => {
+            Restaurant.create({
+                ...test_restaurant,
+            }, (new_restaurant, err) => {
+                done();
+            });
+        });
     });
 
     // Rage quit after running tests
@@ -29,10 +39,14 @@ describe("restaurant", () => {
                 .get("/restaurants/all")
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a("object");
-                    res.body.should.have.property("message");
-                    res.body.should.have.property("error");
-                    res.body.should.have.property("data");
+                    res.body.should.be.an("object");
+                    ["message", "error", "data"].forEach(prop => {
+                        res.body.should.have.property(prop);
+                    });
+
+                    console.log(res.body);
+                    res.body.data.should.be.an('array').that.is.not.empty;
+                    // res.body.error.should.be.a("null");
                 done();
             });
         });
@@ -50,11 +64,11 @@ describe("restaurant", () => {
                 .post("/restaurants/new")
                 .send(restaurant)
                 .end((err, res) => {
-                        res.should.have.status(201);
-                        res.body.should.be.a("object");
-                        res.body.should.have.property("message");
-                        res.body.should.have.property("error");
-                        res.body.should.have.property("data");
+                    res.should.have.status(201);
+                    res.body.should.be.an("object");
+                    ["message", "error", "data"].forEach(prop => {
+                        res.body.should.have.property(prop);
+                    });
                     done();
             });
         });
@@ -76,10 +90,10 @@ describe("restaurant", () => {
                 .send(restaurant)
                 .end((err, res) => {
                     res.should.have.status(201);
-                    res.body.should.be.a("object");
-                    res.body.should.have.property("message");
-                    res.body.should.have.property("error");
-                    res.body.should.have.property("data");
+                    res.body.should.be.an("object");
+                    ["message", "error", "data"].forEach(prop => {
+                        res.body.should.have.property(prop);
+                    });
                     restaurant_id = res.body._id;
                     done();
             });
@@ -98,10 +112,10 @@ describe("restaurant", () => {
                 .send(updated_restuarant)
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a("object");
-                    res.body.should.have.property("message");
-                    res.body.should.have.property("error");
-                    res.body.should.have.property("data");
+                    res.body.should.be.an("object");
+                    ["message", "error", "data"].forEach(prop => {
+                        res.body.should.have.property(prop);
+                    });
                     console.dir(
                         res.body._id
                     )
@@ -128,11 +142,11 @@ describe("restaurant", () => {
                 .post("/restaurants/new")
                 .send(restaurant)
                 .end((err, res) => {
-                    res.should.have.status(201);
-                    res.body.should.be.a("object");
-                    res.body.should.have.property("message");
-                    res.body.should.have.property("error");
-                    res.body.should.have.property("data");
+                    res.should.have.status(200);
+                    res.body.should.be.an("object");
+                    ["message", "error", "data"].forEach(prop => {
+                        res.body.should.have.property(prop);
+                    });
                     console.dir(
                         res.body._id
                     )
@@ -152,10 +166,10 @@ describe("restaurant", () => {
                 .send(restaurant)
                 .end((err, res) => {
                     res.should.have.status(201);
-                    res.body.should.be.a("object");
-                    res.body.should.have.property("message");
-                    res.body.should.have.property("error");
-                    res.body.should.have.property("data");
+                    res.body.should.be.an("object");
+                    ["message", "error", "data"].forEach(prop => {
+                        res.body.should.have.property(prop);
+                    });
                     done();
             });
         });
