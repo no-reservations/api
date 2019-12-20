@@ -130,21 +130,20 @@ exports.update_restaurant = async function(req, res) {
 }
 
 exports.delete_restaurant = async function(req, res) {
-    const restaurant_name = req.params.restaurant;
-    const sanitized_name = sanitize(restaurant_name);
+    const restaurant_id = req.params.restaurant_id;
 
     try {
-        const deleted_restaurant = await Restaurant.findOneAndDelete({ normal_name: sanitized_name });
+        const deleted_restaurant = await Restaurant.findOneAndDelete({ _id: restaurant_id });
 
         if(deleted_restaurant) {
             res.status(200).json({
-                message: `Successfully deleted '${restaurant_name}'.`,
+                message: `Successfully deleted '${deleted_restaurant.name}'.`,
                 error: null,
                 data: deleted_restaurant,
             });
         } else {
             res.status(404).json({
-                message: `Couldn't find a restaurant named '${restaurant_name}'.`,
+                message: `No restaurant found with id '${restaurant_id}'.`,
                 error: null,
                 data: null,
             });
