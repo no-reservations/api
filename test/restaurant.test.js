@@ -17,12 +17,15 @@ const test_restaurant = {
     location: "Portland, Oregon",
 }
 
+let restaurant_id = null;
+
 describe("restaurant", () => {
     beforeEach(done => {
         Restaurant.remove({}, (err) => {
             Restaurant.create({
                 ...test_restaurant,
-            }, (new_restaurant, err) => {
+            }, (err, new_restaurant) => {
+                restaurant_id = new_restaurant._id;
                 done();
             });
         });
@@ -31,10 +34,11 @@ describe("restaurant", () => {
     // Rage quit after running tests
     after(done => {
         process.exit(0);
+        done();
     });
 
     describe("GET restaurant", () => {
-        it("it should GET all the restaurants", (done) => {
+        it("it should successfully GET all restaurants", (done) => {
             chai.request(server)
                 .get("/restaurants/all")
                 .end((err, res) => {
@@ -44,20 +48,17 @@ describe("restaurant", () => {
                         res.body.should.have.property(prop);
                     });
 
-                    console.log(res.body);
                     res.body.data.should.be.an('array').that.is.not.empty;
-                    // res.body.error.should.be.a("null");
                 done();
             });
         });
     });
 
     describe("POST restaurant", () => {
-        it("it should POST a restaurant", (done) => {
+        it("it should successfully POST a restaurant", (done) => {
             const restaurant = {
-                name: "test_restaurant",
-                normal_name: "test-restaurant",
-                tables: 10,
+                name: "test_restaurant_post",
+                tables: 20,
                 location: "Portland, Oregon",
             }
             chai.request(server)
@@ -76,36 +77,11 @@ describe("restaurant", () => {
 
     // TODO: Create restaurant before PUTing to that restaurant
     describe("PUT restaurant", () => {
-        let restaurant_id = null;
-        it("it should POST a new restaurant for PUT", done => {
-            const restaurant = {
-                name: "test_restaurant",
-                normal_name: "test-restaurant",
-                tables: 10,
-                location: "Portland, Oregon",
-            }
-            // Create new restaurant
-            chai.request(server)
-                .post("/restaurants/new")
-                .send(restaurant)
-                .end((err, res) => {
-                    res.should.have.status(201);
-                    res.body.should.be.an("object");
-                    ["message", "error", "data"].forEach(prop => {
-                        res.body.should.have.property(prop);
-                    });
-                    restaurant_id = res.body._id;
-                    done();
-            });
-        });
-        it("it should PUT to an already created restaurant", done => {
+        it("it should successfully PUT to a restaurant", done => {
             const updated_restuarant = {
                 // Should not be "test_restaurant"
                 name: "restaurant_test"
-            }
-            console.log(
-                `/restaurants/${restaurant_id}/update`
-            );
+            };
             
             chai.request(server)
                 .put(`/restaurants/${restaurant_id}/update`)
@@ -116,10 +92,8 @@ describe("restaurant", () => {
                     ["message", "error", "data"].forEach(prop => {
                         res.body.should.have.property(prop);
                     });
-                    console.dir(
-                        res.body._id
-                    )
-                    res.body.data.name.should.be(
+
+                    res.body.data.name.should.equal(
                         updated_restuarant.name
                     )
                     done();
@@ -127,45 +101,12 @@ describe("restaurant", () => {
         });
     });
 
-    // TODO: Create restaurant before DELETEing to that restaurant
     describe("DELETE restaurant", () => {
-        let restaurant_id = null;
-        it("it should POST a new restaurant for DELETE", done => {
-            const restaurant = {
-                name: "test_restaurant",
-                normal_name: "test-restaurant",
-                tables: 10,
-                location: "Portland, Oregon",
-            }
-            // Create new restaurant
-            chai.request(server)
-                .post("/restaurants/new")
-                .send(restaurant)
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.an("object");
-                    ["message", "error", "data"].forEach(prop => {
-                        res.body.should.have.property(prop);
-                    });
-                    console.dir(
-                        res.body._id
-                    )
-                    restaurant_id = res.body._id;
-                    done();
-            });
-        });
-        it("it should DELETE a restaurant", (done) => {
-            const restaurant = {
-                name: "test_restaurant",
-                normal_name: "test-restaurant",
-                tables: 10,
-                location: "Portland, Oregon",
-            }
+        it("it should successfully DELETE a restaurant", (done) => {
             chai.request(server)
                 .delete(`/restaurants/${restaurant_id}/remove`)
-                .send(restaurant)
                 .end((err, res) => {
-                    res.should.have.status(201);
+                    res.should.have.status(200);
                     res.body.should.be.an("object");
                     ["message", "error", "data"].forEach(prop => {
                         res.body.should.have.property(prop);
