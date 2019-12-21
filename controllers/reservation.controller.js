@@ -5,19 +5,17 @@ const Restaurant = require("../models/restaurant.model");
 const sanitize = require("../utils").sanitize;
 
 exports.get_reservations = async function(req, res) {
-    const restaurant_name = req.params.restaurant;
-    const sanitized_name = sanitize(restaurant_name);
+    const restaurant_id = req.params.restaurant_id;
 
     try {
         const restaurant = await Restaurant
-            .findOne({ normal_name: sanitized_name })
+            .findById({ _id: restaurant_id })
             .populate("reservations")
             .exec();
 
         if(restaurant) {
-            reservations = restaurant.reservations;
-
-            message = !reservations.length ? `No reservations have been made yet.`: `Successfully found all reservations.`;
+            const reservations = restaurant.reservations;
+            const message = !reservations.length ? `No reservations have been made yet.`: `Successfully found all reservations.`;
                  
             res.status(200).json({
                 message: message,
@@ -26,7 +24,7 @@ exports.get_reservations = async function(req, res) {
             });
         } else {
             res.status(404).json({
-                message: `No restaurant named '${restaurant_name}'.`,
+                message: `Could not find restaurant with id '${restaurant_id}'.`,
                 error: null,
                 data: null,
             });
@@ -34,7 +32,7 @@ exports.get_reservations = async function(req, res) {
 
     } catch (error) {
         res.status(500).json({
-            message: `Failed to get reservations for '${restaurant_name}'.`,
+            message: `Failed to get reservations for restaurant with id '${restaurant_id}'.`,
             error: error.toString(),
             data: null,
         });
@@ -42,13 +40,11 @@ exports.get_reservations = async function(req, res) {
 }
 
 exports.get_reservation = async function(req, res) {
-    const reservation_id = req.params.reservation;
+    const reservation_id = req.params.reservation_id;
 
     try {
         const reservation = await Reservation.findById(reservation_id);
-        console.log(
-            reservation
-        )
+
         if(reservation) {
             res.status(200).json({
                 message: `Successfully found reservation with id '${reservation_id}'`,
@@ -72,16 +68,15 @@ exports.get_reservation = async function(req, res) {
 }
 
 exports.create_reservation = async function(req, res) {
-    const real_name = req.params.restaurant;
-    const sanitized_name = sanitize(real_name);
+    const restaurant_id = req.params.restaurant_id;
 
     try {
-        const restaurant = await Restaurant.findOne({ normal_name: sanitized_name });
+        const restaurant = await Restaurant.findById({ _id: restaurant_id });
 
         const new_reservation = await Reservation.create({
             start: req.body.start,
             end: req.body.end,
-            restaurant: restaurant._id,
+            restaurant: restaurant_id, //restaurant._id,
             party_size: req.body.party_size,
         });
 
@@ -89,6 +84,7 @@ exports.create_reservation = async function(req, res) {
         restaurant.tables_reserved += 1;
         await restaurant.save();
 
+        console.log(restaurant);
         res.status(201).json({
             message: `Successfully created reservation.`,
             error: null,

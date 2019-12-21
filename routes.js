@@ -13,9 +13,9 @@ module.exports = function routes(app) {
     // TODO: Use token middleware to ensure we're the correct user
     app.get("/users/:user_id", user.get_user);
     app.get("/restaurants/all", restaurant.get_restaurants);
-    app.get("/restaurants/:restaurant", restaurant.get_restaurant);
-    app.get("/restaurants/:restaurant/reservations", reservation.get_reservations);
-    app.get("/restaurants/:restaurant/reservations/:reservation", reservation.get_reservation);
+    app.get("/restaurants/:restaurant_id", restaurant.get_restaurant);
+    app.get("/restaurants/:restaurant_id/reservations", reservation.get_reservations);
+    app.get("/restaurants/:restaurant_id/reservations/:reservation_id", reservation.get_reservation);
     
     app.post("/users/new", user.create_user);
     app.post("/restaurants/new", restaurant.create_restaurant);
