@@ -19,7 +19,7 @@ let restaurant_id = null;
 
 describe("restaurant", () => {
     beforeEach(done => {
-        Restaurant.remove({}, (err) => {
+        Restaurant.deleteMany({}, (err) => {
             Restaurant.create({
                 ...test_restaurant,
             }, (err, new_restaurant) => {

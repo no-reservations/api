@@ -9,6 +9,7 @@ const database_url = `${database_uri}/${database_name}`;
 mongoose.connect(database_url, { 
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
 });
 
 const db = mongoose.connection;

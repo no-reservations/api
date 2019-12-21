@@ -28,9 +28,9 @@ let reservation_id = null;
 describe("reservation", () => {
     beforeEach(done => {
         // Remove all restaurants from database
-        Restaurant.remove({}, (err) => {
+        Restaurant.deleteMany({}, (err) => {
             // Remove all reservations from database
-            Reservation.remove({}, err => {
+            Reservation.deleteMany({}, err => {
 
                 // Create a new restaurant for tests to interact with
                 Restaurant.create({
@@ -74,8 +74,6 @@ describe("reservation", () => {
     });
 
     describe("POST reservation", () => {
-        let restaurant_id = null;
-        let reservation_id = null;
         it("it should POST a reservation to a restaurant", (done) => {
 
             // Create reservation
@@ -111,7 +109,6 @@ describe("reservation", () => {
 
                     res.body.data.name.should.be(
                         updated_reservation.size,
-                        6
                     )
                     done();
             });
@@ -132,4 +129,4 @@ describe("reservation", () => {
             });
         });
     });
-})
+});
