@@ -74,6 +74,7 @@ exports.create_reservation = async function(req, res) {
         const restaurant = await Restaurant.findById({ _id: restaurant_id });
 
         const new_reservation = await Reservation.create({
+            name: req.body.name,
             start: req.body.start,
             end: req.body.end,
             restaurant: restaurant_id, //restaurant._id,
@@ -84,7 +85,6 @@ exports.create_reservation = async function(req, res) {
         restaurant.tables_reserved += 1;
         await restaurant.save();
 
-        console.log(restaurant);
         res.status(201).json({
             message: `Successfully created reservation.`,
             error: null,
